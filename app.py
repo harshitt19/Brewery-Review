@@ -37,15 +37,16 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
             session['user_id'] = user.id
             return redirect(url_for('search'))
         else:
-            return 'Invalid credentials'
+            error_message = 'Invalid credentials. Please try again.'
+            return render_template('login.html', error_message=error_message)
     return render_template('login.html')
 
-@app.route('/signup.html', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -62,10 +63,10 @@ def search():
         return redirect(url_for('login'))
 
     breweries = []
-    search_performed = False  # Initialize the flag
+    search_performed = False
 
     if request.method == 'POST':
-        search_performed = True  # Set the flag to True when a search is performed
+        search_performed = True
         search_by = request.form['search_by']
         search_value = request.form['search_value']
         if search_by == 'city':
@@ -75,7 +76,7 @@ def search():
         elif search_by == 'type':
             response = requests.get(f'https://api.openbrewerydb.org/breweries?by_type={search_value}')
         breweries = response.json()
-    
+
     return render_template('search.html', breweries=breweries, search_performed=search_performed)
 
 @app.route('/brewery/<id>', methods=['GET', 'POST'])
@@ -85,16 +86,16 @@ def brewery(id):
 
     response = requests.get(f'https://api.openbrewerydb.org/breweries/{id}')
     brewery = response.json()
-    
+
     if request.method == 'POST':
         rating = request.form['rating']
         description = request.form['description']
         new_review = Review(brewery_id=id, user_id=session['user_id'], rating=rating, description=description)
         db.session.add(new_review)
         db.session.commit()
-    
+
     reviews = Review.query.filter_by(brewery_id=id).all()
-    
+
     return render_template('brewery.html', brewery=brewery, reviews=reviews)
 
 @app.route('/logout')
