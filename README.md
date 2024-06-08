@@ -43,14 +43,13 @@ Before you begin, ensure you have met the following requirements:
 
 ## Running the Application
 1. Initialize the Database
-
-Initialize the database and create the necessary tables:
+   Initialize the database and create the necessary tables:
 
     ```sh
     flask db init
     flask db migrate
     flask db upgrade
-
+   
 2. Run the Flask Application
 
     ```sh
