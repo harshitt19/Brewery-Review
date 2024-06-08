@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Breweries</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #673f26;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #cbc3c3;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #9d9d9d;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <h2>Search Breweries</h2>
+    <form action="{{ url_for('search') }}" method="POST">
+        <label for="search_by">Search by:</label>
+        <select id="search_by" name="search_by">
+            <option value="city">City</option>
+            <option value="name">Name</option>
+            <option value="type">Type</option>
+        </select>
+        <input type="text" id="search_value" name="search_value" required>
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% if search_performed %}
+            <h3>Results:</h3>
+            <ul>
+                {% if breweries and breweries|length > 0 %}
+                    {% for brewery in breweries %}
+                        <li>
+                            <a href="{{ url_for('brewery', id=brewery['id']) }}">{{ brewery['name'] }}</a>
+                            <p>{{ brewery['street'] }}, {{ brewery['city'] }}, {{ brewery['state'] }}</p>
+                            <p>Phone: {{ brewery['phone'] }}</p>
+                            <p><a href="{{ brewery['website_url'] }}" target="_blank">{{ brewery['website_url'] }}</a></p>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No results found. Please try a different city.</li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+</body>
+</html>
