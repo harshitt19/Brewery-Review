@@ -8,10 +8,7 @@ Welcome to Brewery Review! This is a Flask application where users can review di
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
+  
 
 ## About
 
