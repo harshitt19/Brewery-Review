@@ -55,3 +55,4 @@ Before you begin, ensure you have met the following requirements:
     flask run
 
 By default, the application will run on http://127.0.0.1:5000/.
+## The website is hosted on the following link https://brewery-review-3.onrender.com 
